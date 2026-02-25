@@ -1,5 +1,6 @@
-Kubernetes EKS Terraform Deployment with Helm Applications and Sample App
-Overview
+Kubernetes EKS Terraform Deployment with Helm Applications and Sample App Overview
+
+
 
 This repository contains Terraform code to provision a fully functional AWS EKS cluster with:
 
@@ -28,6 +29,9 @@ Additionally, a sample application (app1) with backend and frontend is deployed 
 A cleanup script is included to safely remove cluster resources before running terraform destroy.
 
 
+
+
+
 Prerequisites
 
 Terraform >= 1.5
@@ -41,6 +45,7 @@ Helm >= 3
 jq (optional, used in cleanup script)
 
 
+
 Deployment Steps
 
 terraform init
@@ -49,12 +54,15 @@ terraform plan
 terraform apply --auto-approve
 This will create the VPC, EKS cluster, node groups, IAM roles, and deploy Helm applications (EFS CSI Driver, ALB Controller, ArgoCD, Prometheus).
 
+
 Configure AWS CLI
 run the command aws eks update-kubeconfig --region us-west-2 --name my-eks-cluster   # replace the AWS region us-west-2, with your own AWS region
 This command uses the AWS CLI to configure your local kubectl so it can connect to your Amazon EKS cluster.
 
+
 Verify cluster is ready by running the following command:
 kubectl get nodes
+
 
 Deploy Sample Application (app1)
 
@@ -63,6 +71,7 @@ All resources are in the dev namespace.
 Create namespace
 
 kubectl apply -f namespace.yaml
+
 
 Create ServiceAccount and RBAC
 
@@ -79,6 +88,8 @@ Apply Ingress
 kubectl apply -f ingress.yaml
 
 Make sure to update the alb.ingress.kubernetes.io/certificate-arn annotation in ingress.yaml with your ACM certificate ARN.
+
+
 
 OPTIONAL
 Below are steps to destroy the entire setup if needed
@@ -105,6 +116,9 @@ If subnets or resources fail to delete, run:
 
 terraform destroy --auto-approve -target=module.eks
 terraform destroy --auto-approve
+
+
+
 Notes
 
 ALB Ingress: Provides host-based routing for frontend.hex.com and backend.hex.com. Ensure DNS points to the ALB.
@@ -114,6 +128,8 @@ RBAC: All pods in dev namespace use dev-sa service account with limited permissi
 EFS: Configured using EFS CSI Driver for persistent storage (if used in workloads).
 
 Monitoring & GitOps: Prometheus monitors cluster metrics; ArgoCD manages GitOps workflows.
+
+
 
 
 References
